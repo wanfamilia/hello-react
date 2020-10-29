@@ -12,3 +12,47 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.hex {
+  position: relative;
+  height: 6.5em;
+  width: 5.5em;
+}
+
+.hexgrid tr:nth-child(even) .hex {
+  left: 2.8em;
+  top: -1.75em;
+  height: 3em;
+}
+
+.hexgrid tr:nth-child(even) .hex-content {
+  top: 1.5em;
+}
+
+.hexgrid tr:nth-child(odd) .hex-content {
+  top: -0.3em;
+}
+
+
+.hex div {
+}
+.hex-background {
+  position: absolute;
+  top: 0; left: 0;
+  color: #6C6; font-size: 10em;
+  width: 100%;
+  height: 100%;
+  line-height: 0.4;
+  display: flex;
+  justify-content: center;
+}
+.hex-content {
+  top: 0; left: 0;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+

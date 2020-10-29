@@ -1,39 +1,43 @@
 import React, { Component } from 'react';
-import HelloWorldService from '../service/HelloWorldService';
+import HexTileComponent from './HexTileComponent'
 
 class HelloWorldStringComponent extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            welcomeMessage: 'initial message'
-        }
-    }
-
-    componentDidMount() {
-        HelloWorldService.executeHelloWorldService()
-            .then(response => {
-                this.setState({welcomeMessage: response.data})
-            })
-            .catch(() => {
-                this.setState({welcomeMessage: 'Error Processing Request'})
-            })
-    }
-
     render() {
         return (<>
-            <h1>Hello World String Component</h1>
-            <div className="container">
-                {this.state.welcomeMessage}
-            </div>
-            <div className="row">
-                <button className="btn btn-success" onClick={this.gotoBeanComponent}>Go</button>
-            </div>
+          <table className="hexgrid">
+              <tbody>
+                <tr>
+                    <td><HexTileComponent>a</HexTileComponent></td>
+                    <td><HexTileComponent>b</HexTileComponent></td>
+                    <td><HexTileComponent>c</HexTileComponent></td>
+                    <td><HexTileComponent>d</HexTileComponent></td>
+                </tr>
+                <tr>
+                    <td><HexTileComponent>e</HexTileComponent></td>
+                    <td><HexTileComponent>f</HexTileComponent></td>
+                    <td><HexTileComponent>g</HexTileComponent></td>
+                    <td><HexTileComponent>h</HexTileComponent></td>
+                </tr>
+                <tr>
+                  <td><HexTileComponent>i</HexTileComponent></td>
+                  <td><HexTileComponent>j</HexTileComponent></td>
+                  <td><HexTileComponent>k</HexTileComponent></td>
+                  <td><HexTileComponent>l</HexTileComponent></td>
+                </tr>
+                <tr>
+                  <td><HexTileComponent>m</HexTileComponent></td>
+                  <td><HexTileComponent>n</HexTileComponent></td>
+                  <td><HexTileComponent>o</HexTileComponent></td>
+                  <td><HexTileComponent>p</HexTileComponent></td>
+                </tr>
+              </tbody>
+
+          </table>
+            <HexTileComponent>
+                FOO
+            </HexTileComponent>
         </>
         )
-    }
-
-    gotoBeanComponent = () => {
-        this.props.history.push('/hello-world-bean')
     }
 }
 
