@@ -12,7 +12,7 @@ class HelloWorldBeanComponent extends Component {
     componentDidMount() {
         HelloWorldService.executeHelloWorldBeanService()
             .then(response => this.setState({ welcomeMessage: response.data.message }))
-            .catch(this.setState({ welcomeMessage: 'Error Processing Request' }))
+            .catch(() => this.setState({ welcomeMessage: 'Error Processing Request' }))
     }
 
     render() {

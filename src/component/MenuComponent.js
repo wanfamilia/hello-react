@@ -9,7 +9,6 @@ class MenuComponent extends Component {
         return (
             <header>
                 <nav className="navbar navbar-expand-md navbar-dark bg-dark">
-                    <div><a href="http://www.in28minutes.com" className="navbar-brand">in28Minutes</a></div>
                     <ul className="navbar-nav">
                         <li><Link className="nav-link" to="/hello-world-string">World String</Link></li>
                         <li><Link className="nav-link" to="/hello-world-bean">World Bean</Link></li>

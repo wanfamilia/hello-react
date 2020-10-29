@@ -15,22 +15,18 @@ code {
 
 .hex {
   position: relative;
-  height: 6.5em;
+  height: 4.7em;
   width: 5.5em;
 }
 
 .hexgrid tr:nth-child(even) .hex {
   left: 2.8em;
-  top: -1.75em;
-  height: 3em;
 }
 
 .hexgrid tr:nth-child(even) .hex-content {
-  top: 1.5em;
 }
 
 .hexgrid tr:nth-child(odd) .hex-content {
-  top: -0.3em;
 }
 
 
@@ -47,12 +43,15 @@ code {
   justify-content: center;
 }
 .hex-content {
-  top: 0; left: 0;
+  top: 0.75em;
+  border-radius: 50%;
+  left: 0.2em;
+  overflow: hidden;
   position: absolute;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
+  width: 93%;
   height: 100%;
 }
 

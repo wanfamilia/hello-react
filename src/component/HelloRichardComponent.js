@@ -14,7 +14,7 @@ class HelloRichardComponent extends Component {
     componentDidMount() {
         HelloWorldService.executeHelloWorldService()
             .then(response => this.setState({ welcomeMessage: response.data }))
-            .catch(this.setState({ welcomeMessage: 'Error Processing Request' }))
+            .catch(_err => this.setState({ welcomeMessage: 'Error Processing Request' }))
     }
 
     render() {
