@@ -25,10 +25,10 @@ class HexGridComponent extends Component {
   }
 
   indices() {
-    let size = this.state.size;
-    debugger
-    return Array(size || 0).fill().map((v, i) => i)
+    let size = this.state.size || 0;
+    return Array(size).fill().map((v, i) => i)
   }
+
 
   tile(row, column) {
     let key = "cell" + row + ":" + column
@@ -37,10 +37,22 @@ class HexGridComponent extends Component {
         <div className="hex-background">
           &#x2B22;
         </div>
-        <div className="hex-content">{key}</div>
+        <div className="hex-content">{this.props.children(HexGridComponent.position(row, column))}</div>
       </div>
     </td>
   }
 }
+
+let position = (row, column) => {
+  let offset = row % 2 === 0 ? 0 : 0.5
+  let x = column+offset;
+  let y = row*Math.sqrt(0.75);
+  let distance = (that) => {
+    return Math.sqrt((x - that.x) ** 2 + (y - that.y) ** 2)
+  }
+  return {x: x, y: y, label: row+":"+column, distanceTo: distance}
+}
+
+HexGridComponent.position = position
 
 export default HexGridComponent
