@@ -50,7 +50,17 @@ let position = (row, column) => {
   let distance = (that) => {
     return Math.sqrt((x - that.x) ** 2 + (y - that.y) ** 2 * 0.75)
   }
-  return {x: x, y: y, label: row+":"+column, distanceTo: distance, row: row, column: column}
+  let move = (rowdir, coldir) => () => position(row + rowdir, column + coldir)
+  let shiftleft = row % 2 === 0 ? -1 : 0
+  return {
+    x: x, y: y, label: row+":"+column, distanceTo: distance,
+    row: row, column: column,
+    "4": move(0, -1), "6": move(0, 1),
+    "8": move(-1, 0), "2": move(1, 0),
+    "1": move(1, shiftleft), "7": move(-1, shiftleft),
+    "3": move(1, shiftleft+1), "9": move(-1, shiftleft + 1)
+
+  }
 }
 
 HexGridComponent.position = position
