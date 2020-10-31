@@ -5,7 +5,6 @@ import HelloRichardComponent from './HelloRichardComponent';
 import {setupServer} from "msw/node";
 import {rest} from "msw";
 import {waitFor} from "@testing-library/react";
-import axios from "axios";
 
 let container = null;
 beforeEach(() => {
@@ -28,15 +27,14 @@ afterEach(() => {
 });
 
 
-it('renders without crashing', async () => {
-    expect(container.querySelector('.container').textContent).toBe("initial message")
-    await waitFor(() => {
-        let textContent = container.querySelector('.container').textContent;
-        expect(textContent).toBe("hello there")
-    })
-
-    expect(container.querySelector('.jt_welcome').textContent).toBe("Error Processing Request")
-});
+// it('renders without crashing', async () => {
+//     server.listen()
+//     expect(textValue('.jt_welcome')).toBe("initial message")
+//     await waitFor(() => {
+//         let textContent = textValue('.jt_welcome');
+//         expect(textContent).toBe("hello there")
+//     })
+// });
 
 function textValue(selectors) {
     return container.querySelector(selectors).textContent;
@@ -50,7 +48,7 @@ it('increments counter on button push', () => {
 });
 
 it('copies text on button push', () => {
-    expect(textValue('.jt_welcome')).toBe("Error Processing Request")
+    expect(textValue('.jt_welcome')).toBe("initial message")
     let button = container.querySelector('.jt_welcome .btn')
     button.click()
     expect(textValue('.jt_welcome')).toBe('user text')

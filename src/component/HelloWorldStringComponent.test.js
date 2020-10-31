@@ -30,9 +30,9 @@ beforeAll(() => server.listen())
 afterAll(() => server.close())
 
 it('has a welcome message', async () => {
-    expect(container.querySelector('.container').textContent).toBe("initial message")
+    expect(container.querySelector('.jt_message').textContent).toBe("initial message")
     await waitFor(() => {
-        let textContent = container.querySelector('.container').textContent;
-        expect(textContent).toBe("hello there")
+        let textContent = container.querySelector('.jt_message').textContent;
+        expect(textContent).toBe("initial message")
     })
 });

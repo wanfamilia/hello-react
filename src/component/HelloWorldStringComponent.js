@@ -5,7 +5,7 @@ class HelloWorldStringComponent extends Component {
 
     render() {
         let refpos = HexGridComponent.position(2, 2)
-        return (<><p className="jt_message">hello world 0932</p>
+        return (<><p className="jt_message">initial message</p>
           <HexGridComponent size="7">
             {(position) => <div>
               D: {refpos.distanceTo(position).toFixed(1)}
