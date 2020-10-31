@@ -2,6 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils'
 import HelloRichardComponent from './HelloRichardComponent';
+import {setupServer} from "msw/node";
+import {rest} from "msw";
+import {waitFor} from "@testing-library/react";
+import axios from "axios";
 
 let container = null;
 beforeEach(() => {
@@ -11,7 +15,26 @@ beforeEach(() => {
     document.body.appendChild(container);
 });
 
-it('renders without crashing', () => {
+const server = setupServer(
+  rest.get('http://localhost:8080/hello-world', (req, res, ctx) => {
+      return res(ctx.json('hello there'))
+  }),
+)
+
+afterEach(() => {
+    document.body.removeChild(container);
+    container = null;
+    server.resetHandlers()
+});
+
+
+it('renders without crashing', async () => {
+    expect(container.querySelector('.container').textContent).toBe("initial message")
+    await waitFor(() => {
+        let textContent = container.querySelector('.container').textContent;
+        expect(textContent).toBe("hello there")
+    })
+
     expect(container.querySelector('.jt_welcome').textContent).toBe("Error Processing Request")
 });
 

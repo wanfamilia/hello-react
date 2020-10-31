@@ -9,7 +9,7 @@ class HelloWorldApp extends Component {
     render() {
         return (
             <>
-                <Router basename="react1745">
+                <Router basename="app">
                     <>
                         <MenuComponent />
                         <div className="container">

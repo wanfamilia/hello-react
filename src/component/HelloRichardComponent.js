@@ -5,7 +5,7 @@ class HelloRichardComponent extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            welcomeMessage: '',
+            welcomeMessage: 'initial message',
             text: 'user text',
             counter: 55
         }

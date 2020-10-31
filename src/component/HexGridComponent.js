@@ -46,11 +46,11 @@ class HexGridComponent extends Component {
 let position = (row, column) => {
   let offset = row % 2 === 0 ? 0 : 0.5
   let x = column+offset;
-  let y = row*Math.sqrt(0.75);
+  let y = row;
   let distance = (that) => {
-    return Math.sqrt((x - that.x) ** 2 + (y - that.y) ** 2)
+    return Math.sqrt((x - that.x) ** 2 + (y - that.y) ** 2 * 0.75)
   }
-  return {x: x, y: y, label: row+":"+column, distanceTo: distance}
+  return {x: x, y: y, label: row+":"+column, distanceTo: distance, row: row, column: column}
 }
 
 HexGridComponent.position = position
