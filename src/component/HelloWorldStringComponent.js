@@ -6,7 +6,7 @@ class HelloWorldStringComponent extends Component {
     constructor(props) {
       super(props)
       this.state = {
-        welcomeMessage: 'initial message',
+        welcomeMessage: 'Use numpad to move',
         grid: {
           centre: HexGridComponent.position(2, 4),
           object: HexGridComponent.position(6, 8)
@@ -30,7 +30,7 @@ class HelloWorldStringComponent extends Component {
         return (<>
           <KeyboardEventHandler handleKeys={['numeric']} onKeyEvent={this.changePosition}/>
           <p className="jt_message">{this.state.welcomeMessage}</p>
-          <HexGridComponent radius="4" getCentre={this.getCentre}>
+          <HexGridComponent radius="3" getCentre={this.getCentre}>
             {(position) => {
               if (position.matches(this.getCentre())) {
                 return <div>X</div>

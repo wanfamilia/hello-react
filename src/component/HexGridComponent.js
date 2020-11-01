@@ -32,10 +32,12 @@ class HexGridComponent extends Component {
     return Array(size).fill().map((v, i) => i)
   }
 
-  relativePosition = (row, column) => {
+  calculatePosition = (row, column) => {
     let offset = this.state.radius;
     let centre = this.getCentre();
-    let correction = centre.row % 2 === 0 || row %2 === 0 ? 0 : 1
+    let radiusParity = this.state.radius %2;
+    let aligned = centre.row %2 === radiusParity || row %2 === radiusParity;
+    let correction = aligned ? 0 : 1 - radiusParity * 2
     return centre.move(row - offset, column - offset + correction)()
   }
 
@@ -47,7 +49,7 @@ class HexGridComponent extends Component {
         <div className="hex-background">
           &#x2B22;
         </div>
-        <div className="hex-content">{this.props.children(this.relativePosition(row, column))}</div>
+        <div className="hex-content">{this.props.children(this.calculatePosition(row, column))}</div>
       </div>
     </td>
   }
