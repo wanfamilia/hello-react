@@ -10,6 +10,9 @@ let create = (sf, initial) => {
   return {
     label: (position) => {
       return content.fetch(position).label()
+    },
+    content: (position) => {
+      return content.fetch(position)
     }
   }
 }

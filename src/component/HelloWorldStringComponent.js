@@ -22,11 +22,23 @@ class HelloWorldStringComponent extends Component {
     }
 
     changePosition = (direction) => {
-      let movedir = this.getCentre()[direction];
+      if (!this.player.isAlive()) {
+        this.setState({welcomeMessage: "Your character has died"})
+        return
+      }
+      let centre = this.getCentre();
+      let movedir = centre[direction];
       if (!movedir) {
         return;
       }
-      this.setState({grid: {centre: movedir(), object: this.state.grid.object}})
+      let thatCentre = movedir()
+      let target = this.locations.content(thatCentre)
+      let interaction = target.interact({
+        player: this.player,
+        playerPosition: centre,
+        destination: thatCentre
+      })
+      this.setState({grid: {centre: interaction.newPlayerPosition, object: this.state.grid.object}})
     }
 
     getCentre = () => {
