@@ -7,30 +7,36 @@ class HelloWorldStringComponent extends Component {
       super(props)
       this.state = {
         welcomeMessage: 'initial message',
-        refpos: HexGridComponent.position(2, 4)
+        grid: {
+          centre: HexGridComponent.position(2, 4),
+          object: HexGridComponent.position(6, 8)
+        }
       }
     }
 
-    numkey = (key) => {
-      this.changePosition(key)
-    }
-
-    changePosition(direction) {
-      let movedir = this.state.refpos[direction];
+    changePosition = (direction) => {
+      let movedir = this.getCentre()[direction];
       if (!movedir) {
         return;
       }
-      this.setState({refpos: movedir()})
+      this.setState({grid: {centre: movedir(), object: this.state.grid.object}})
+    }
+
+    getCentre = () => {
+      return this.state.grid.centre
     }
 
     render() {
         return (<>
-          <KeyboardEventHandler handleKeys={['numeric']} onKeyEvent={this.numkey}/>
+          <KeyboardEventHandler handleKeys={['numeric']} onKeyEvent={this.changePosition}/>
           <p className="jt_message">{this.state.welcomeMessage}</p>
-          <HexGridComponent size="7">
+          <HexGridComponent radius="4" getCentre={this.getCentre}>
             {(position) => {
-              let number = this.state.refpos.distanceTo(position);
-              let value = number < 1.01 ? number.toFixed(1) : ""
+              if (position.matches(this.getCentre())) {
+                return <div>X</div>
+              }
+              let number = this.state.grid.object.distanceTo(position);
+              let value = number < 2.01 ? number.toFixed(1) : ""
               return <div>
                 {value}
               </div>;
