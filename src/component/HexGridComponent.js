@@ -62,12 +62,14 @@ let position = (row, column) => {
   let distance = (that) => {
     return Math.sqrt((x - that.x) ** 2 + (y - that.y) ** 2 * 0.75)
   }
-  let matches = (that) => {return row === that.row && column === that.column}
+  let id = `${row}:${column}`
+  let matches = (that) => id === that.id
   let move = (rowdir, coldir) => () => position(row + rowdir, column + coldir)
   let shiftleft = row % 2 === 0 ? -1 : 0
   let upleft = move(-1, shiftleft);
   return {
     x: x, y: y, label: row+":"+column, distanceTo: distance,
+    id: id,
     row: row, column: column, matches: matches, move: move,
     "4": move(0, -1), "6": move(0, 1),
     "8": move(-1, 0), "2": move(1, 0),

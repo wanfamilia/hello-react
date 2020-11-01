@@ -1,17 +1,24 @@
 import React, {Component} from 'react';
 import HexGridComponent from "./HexGridComponent";
 import KeyboardEventHandler from 'react-keyboard-event-handler';
+import Locations from "../model/Locations";
+import SubjectFactory from "../model/SubjectFactory";
+import PlayerComponent from "./HeroComponent";
 
 class HelloWorldStringComponent extends Component {
     constructor(props) {
       super(props)
+      let start = Locations.position(20, 20)
       this.state = {
         welcomeMessage: 'Use numpad to move',
+
         grid: {
-          centre: HexGridComponent.position(2, 4),
+          centre: start,
           object: HexGridComponent.position(6, 8)
         }
       }
+      this.locations = Locations.create(SubjectFactory, start)
+      this.player = SubjectFactory.newHero(1)
     }
 
     changePosition = (direction) => {
@@ -30,15 +37,14 @@ class HelloWorldStringComponent extends Component {
         return (<>
           <KeyboardEventHandler handleKeys={['numeric']} onKeyEvent={this.changePosition}/>
           <p className="jt_message">{this.state.welcomeMessage}</p>
+          <PlayerComponent player={this.player}/>
           <HexGridComponent radius="3" getCentre={this.getCentre}>
             {(position) => {
               if (position.matches(this.getCentre())) {
                 return <div>X</div>
               }
-              let number = this.state.grid.object.distanceTo(position);
-              let value = number < 2.01 ? number.toFixed(1) : ""
               return <div>
-                {value}
+                {this.locations.label(position)}
               </div>;
             }}
 
