@@ -11,6 +11,11 @@ let create = (sf, initial) => {
     label: (position) => {
       return content.fetch(position).label()
     },
+    update: (position, replacement) => {
+      if (position && replacement) {
+        content[position.id] = replacement
+      }
+    },
     content: (position) => {
       return content.fetch(position)
     }

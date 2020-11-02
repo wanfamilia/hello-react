@@ -10,8 +10,11 @@ class PlayerComponent extends Component {
 
     let player = this.state.player;
     return (<div>
-        <div>HitPoints: {player.hitPoints} / {player.maxHitPoints()}</div>
-        <div>XP: {player.xp} / {player.nextLevel()}</div>
+        <div className="herobar">
+          <div>HitPoints: {player.hitPoints} / {player.maxHitPoints()}</div>
+          <div>XP: {player.xp} / {player.nextLevel()}</div>
+          <div>Attack: {player.attack}</div>
+        </div>
       </div>
     )
   }

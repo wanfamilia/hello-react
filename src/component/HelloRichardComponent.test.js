@@ -4,7 +4,7 @@ import ReactTestUtils from 'react-dom/test-utils'
 import HelloRichardComponent from './HelloRichardComponent';
 import {setupServer} from "msw/node";
 import {rest} from "msw";
-import {waitFor} from "@testing-library/react";
+// import {waitFor} from "@testing-library/react";
 
 let container = null;
 beforeEach(() => {

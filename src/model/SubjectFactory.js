@@ -36,15 +36,41 @@ let result = {
 
   , createTree: function() {
     return {
-      interact: function(input) {
-        return {newPlayerPosition: input.playerPosition, message: "A tree blocks your path"}
+      interact: function(playerContext) {
+        return {newPlayerPosition: playerContext.playerPosition, message: "A tree blocks your path"}
       },
       label: () => "T"
     }
   }
 
-  , createMonster: (unroundedLevel) => {
+  , createLoot: function(level) {
+    let weaponLevel = dice(level/2)
+    return weaponLevel > 1 && Math.random() < 0.8 && this.createWeapon(weaponLevel)
+  }
+
+  , createWeapon: function(level) {
+    let available = true
+    return {
+      label: () => available ? "?": "",
+      interact: function(playerContext) {
+        let player = playerContext.player
+        if (!available) {
+          player.takeDamage(0)
+          return {newPlayerPosition: playerContext.destination}
+        }
+        let [attack, message] = level > player.attack ?
+          [level,"You have upgraded your attack to level "+level]
+          : [player.attack, "You have no need of a weapon of level "+level]
+        player.attack = attack
+        available = false
+        return {newPlayerPosition: playerContext.destination, message: message}
+      }
+    }
+  }
+
+  , createMonster: function(unroundedLevel) {
     let level = Math.floor(unroundedLevel)
+    let sf = this;
     return {
       maxHitPoints: level,
       hitPoints: level,
@@ -60,12 +86,13 @@ let result = {
           return {newPlayerPosition: playerContext.destination}
         }
         this.hitPoints -= dice(player.attack)
+        player.takeDamage(dice(this.attack))
         if (this.dead()) {
           player.addExperience(level ** 2)
         }
-        player.takeDamage(dice(this.attack))
+        let loot = this.dead() && sf.createLoot(level)
         return {
-          newPlayerPosition: playerContext.playerPosition,
+          newPlayerPosition: playerContext.playerPosition, replacement: loot,
           message: this.dead() ? "You have vanquished a foe!" : "You have wounded a foe..."
         }
       },

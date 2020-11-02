@@ -55,3 +55,9 @@ code {
   height: 100%;
 }
 
+.herobar {
+  display: flex;
+  justify-content: space-between;
+}
+
+

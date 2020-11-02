@@ -22,6 +22,7 @@ class HelloWorldStringComponent extends Component {
     this.locations = Locations.create(SubjectFactory, this.start)
     this.setState({grid: {centre: this.start}})
     this.player.xp = 1
+    this.player.hitPoints = 1
   }
 
   changePosition = (direction) => {
@@ -41,6 +42,7 @@ class HelloWorldStringComponent extends Component {
         playerPosition: centre,
         destination: thatCentre
       })
+      this.locations.update(thatCentre, interaction.replacement)
       this.setState({
         grid: {centre: interaction.newPlayerPosition, object: this.state.grid.object},
         welcomeMessage: interaction.message || this.defaultMessage
