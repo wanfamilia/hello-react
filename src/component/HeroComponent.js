@@ -9,11 +9,16 @@ class PlayerComponent extends Component {
   render() {
 
     let player = this.state.player;
+    let format = (number) => {
+      return number < 1000 ? number : Math.floor(number / 1000) + "K";
+    }
     return (<div>
         <div className="herobar">
           <div>HitPoints: {player.hitPoints} / {player.maxHitPoints()}</div>
-          <div>XP: {player.xp} / {player.nextLevel()}</div>
+          <div>XP: {format(player.xp)} / {format(player.nextLevel())}</div>
           <div>Attack: {player.attack}</div>
+          <div>Defense: {player.defense}</div>
+          <div>Regeneration: {player.regen}</div>
         </div>
       </div>
     )

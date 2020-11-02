@@ -20,9 +20,8 @@ class HelloWorldStringComponent extends Component {
 
   reset = () => {
     this.locations = Locations.create(SubjectFactory, this.start)
+    this.player.reset()
     this.setState({grid: {centre: this.start}})
-    this.player.xp = 1
-    this.player.hitPoints = 1
   }
 
   changePosition = (direction) => {
@@ -54,25 +53,22 @@ class HelloWorldStringComponent extends Component {
     }
 
     render() {
-        return (<>
-          <KeyboardEventHandler handleKeys={['numeric']} onKeyEvent={this.changePosition}/>
-          <button className="btn btn-success" onClick={this.reset}>Reset</button>
-
-          <p className="jt_message">{this.state.welcomeMessage}</p>
-          <PlayerComponent player={this.player}/>
-          <HexGridComponent radius="3" getCentre={this.getCentre}>
-            {(position) => {
-              if (position.matches(this.getCentre())) {
-                return <div>X</div>
-              }
-              return <div>
-                {this.locations.label(position)}
-              </div>;
-            }}
-
-          </HexGridComponent>
-        </>
-        )
+      return (<>
+        <KeyboardEventHandler handleKeys={['numeric']} onKeyEvent={this.changePosition}/>
+        <button className="btn btn-success" onClick={this.reset}>Reset</button>
+        <p className="jt_message">{this.state.welcomeMessage}</p>
+        <PlayerComponent player={this.player}/>
+        <HexGridComponent radius="2" getCentre={this.getCentre}>
+          {(position) => {
+            if (position.matches(this.getCentre())) {
+              return <div className="hex-text">{this.player.label()}</div>
+            }
+            return <div className="hex-text">
+              {this.locations.label(position)}
+            </div>;
+          }}
+        </HexGridComponent>
+      </>)
     }
 }
 

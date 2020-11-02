@@ -1,6 +1,23 @@
+import React from "react";
+
 let dice = (max) => {
   return Math.ceil(Math.random() * max)
 }
+
+let sqrt = (input) => {return Math.floor(Math.sqrt(input))}
+
+let damage = function(amount) {
+  this.hitPoints = Math.min(this.hitPoints - Math.round(amount/dice(this.defense)) + dice(this.regen), this.maxHitPoints())
+}
+
+let conditions = [
+  <div>&#x1f635;</div>
+  ,<div>&#x1f915;</div>
+  ,<div>&#x1f641;</div>
+  ,<div>&#x1f610;</div>
+  ,<div>&#x1f642;</div>
+  ,<div>&#x1f600;</div>
+]
 
 let result = {
   newHero: (initialXp) => {
@@ -10,25 +27,31 @@ let result = {
         this.xp += moreXp
       },
       maxHitPoints: function() {
-        return Math.floor(Math.sqrt(this.xp))
+        return sqrt(this.xp)
       },
-      takeDamage: function(amount) {
-        this.hitPoints = Math.min(this.hitPoints - amount + dice(this.regen), this.maxHitPoints())
-      },
+      takeDamage: damage,
       isAlive: function() {
         return this.hitPoints > 0
       },
       nextLevel: function() {
         return (this.maxHitPoints()+1) ** 2
       },
-      hitPoints: Math.floor(Math.sqrt(initialXp)),
-      attack: 1,
-      regen: 1
+      label: function() {
+        let index = Math.ceil((conditions.length-1) * this.hitPoints / this.maxHitPoints())
+        return conditions[Math.max(0, index)];
+      },
+      reset: function() {
+        this.defense = 1
+        this.attack = 1
+        this.regen = 1
+        this.xp = 1
+        this.hitPoints = 1
+      },
     }
   }
 
   , create: function(level) {
-    if (Math.random() < 0.05) {
+    if (Math.random() < 0.01 * level**2) {
       return this.createTree()
     }
     return this.createMonster(level)
@@ -39,53 +62,65 @@ let result = {
       interact: function(playerContext) {
         return {newPlayerPosition: playerContext.playerPosition, message: "A tree blocks your path"}
       },
-      label: () => "T"
+      label: () => <div>&#x1f332;</div>
     }
   }
 
   , createLoot: function(level) {
-    let weaponLevel = dice(level/2)
-    return weaponLevel > 1 && Math.random() < 0.8 && this.createWeapon(weaponLevel)
+    let lootLevel = dice(level/2)
+    return this.createConsumable(lootLevel, this.weaponDef)
+      || this.createConsumable(lootLevel-1, this.armorDef)
+      || this.createConsumable(Math.floor(lootLevel-2), this.regenDef)
   }
 
-  , createWeapon: function(level) {
+  , createConsumable: function(level, consumeData) {
+    if (Math.random() > 0.4 || level < 2) {
+      return false;
+    }
     let available = true
     return {
-      label: () => available ? "?": "",
+      label: () => available ? "?"+level: "",
       interact: function(playerContext) {
         let player = playerContext.player
         if (!available) {
           player.takeDamage(0)
           return {newPlayerPosition: playerContext.destination}
         }
-        let [attack, message] = level > player.attack ?
-          [level,"You have upgraded your attack to level "+level]
-          : [player.attack, "You have no need of a weapon of level "+level]
-        player.attack = attack
+        let currentValue = player[consumeData.attribute];
+        let [attributeValue, message] = level > currentValue ?
+          [level,`You have upgraded your ${consumeData.description} to level `+level]
+          : [currentValue, `You have no need for ${consumeData.description} of level `+level]
+        player[consumeData.attribute] = attributeValue
         available = false
         return {newPlayerPosition: playerContext.destination, message: message}
       }
     }
   }
 
+  , weaponDef: {attribute: 'attack', description: 'weapon'}
+  , armorDef: {attribute: 'defense', description: 'armor'}
+  , regenDef: {attribute: 'regen', description: 'regeneration'}
+
   , createMonster: function(unroundedLevel) {
     let level = Math.floor(unroundedLevel)
     let sf = this;
     return {
-      maxHitPoints: level,
+      maxHitPoints: () => level,
       hitPoints: level,
       attack: level,
       regen: 0,
+      defense: 1,
       dead: function() {
         return this.hitPoints < 1
       },
+      takeDamage: damage,
       interact: function (playerContext) {
         let player = playerContext.player
         if (this.dead()) {
           player.takeDamage(0)
           return {newPlayerPosition: playerContext.destination}
         }
-        this.hitPoints -= dice(player.attack)
+        this.takeDamage(dice(player.attack))
         player.takeDamage(dice(this.attack))
         if (this.dead()) {
           player.addExperience(level ** 2)
@@ -100,10 +135,10 @@ let result = {
         if (this.dead()) {
           return ""
         }
-        if (this.hitPoints < this.maxHitPoints) {
-          return `${this.hitPoints}/${this.maxHitPoints}`
+        if (this.hitPoints < this.maxHitPoints()) {
+          return `${this.hitPoints}/${this.maxHitPoints()}`
         }
-        return this.maxHitPoints
+        return this.maxHitPoints()
       }
     }
   }

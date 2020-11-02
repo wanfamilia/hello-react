@@ -44,12 +44,16 @@ class HexGridComponent extends Component {
 
   tile(row, column) {
     let key = "cell" + row + ":" + column
+    let gridPosition = this.calculatePosition(row, column);
+    let far = gridPosition.distanceTo(this.getCentre()) > this.state.radius
     return <td key={key}>
-      <div className="hex">
+      <div className={far ? "hidden" : "hex"}>
         <div className="hex-background">
           &#x2B22;
         </div>
-        <div className="hex-content">{this.props.children(this.calculatePosition(row, column))}</div>
+        <div className="hex-content">
+          {this.props.children(gridPosition)}
+        </div>
       </div>
     </td>
   }
