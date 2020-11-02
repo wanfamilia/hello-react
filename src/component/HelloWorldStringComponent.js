@@ -8,20 +8,23 @@ import PlayerComponent from "./HeroComponent";
 class HelloWorldStringComponent extends Component {
     constructor(props) {
       super(props)
-      let start = Locations.position(20, 20)
+      this.defaultMessage = "Use numpad to move"
+      this.start = Locations.position(20, 20)
       this.state = {
-        welcomeMessage: 'Use numpad to move',
-
-        grid: {
-          centre: start,
-          object: HexGridComponent.position(6, 8)
-        }
+        welcomeMessage: this.defaultMessage,
+        grid: {centre: this.start}
       }
-      this.locations = Locations.create(SubjectFactory, start)
       this.player = SubjectFactory.newHero(1)
+      this.reset();
     }
 
-    changePosition = (direction) => {
+  reset = () => {
+    this.locations = Locations.create(SubjectFactory, this.start)
+    this.setState({grid: {centre: this.start}})
+    this.player.xp = 1
+  }
+
+  changePosition = (direction) => {
       if (!this.player.isAlive()) {
         this.setState({welcomeMessage: "Your character has died"})
         return
@@ -38,7 +41,10 @@ class HelloWorldStringComponent extends Component {
         playerPosition: centre,
         destination: thatCentre
       })
-      this.setState({grid: {centre: interaction.newPlayerPosition, object: this.state.grid.object}})
+      this.setState({
+        grid: {centre: interaction.newPlayerPosition, object: this.state.grid.object},
+        welcomeMessage: interaction.message || this.defaultMessage
+      })
     }
 
     getCentre = () => {
@@ -48,6 +54,8 @@ class HelloWorldStringComponent extends Component {
     render() {
         return (<>
           <KeyboardEventHandler handleKeys={['numeric']} onKeyEvent={this.changePosition}/>
+          <button className="btn btn-success" onClick={this.reset}>Reset</button>
+
           <p className="jt_message">{this.state.welcomeMessage}</p>
           <PlayerComponent player={this.player}/>
           <HexGridComponent radius="3" getCentre={this.getCentre}>

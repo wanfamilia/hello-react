@@ -1,3 +1,7 @@
+let dice = (max) => {
+  return Math.ceil(Math.random() * max)
+}
+
 let result = {
   newHero: (initialXp) => {
     return {
@@ -9,8 +13,7 @@ let result = {
         return Math.floor(Math.sqrt(this.xp))
       },
       takeDamage: function(amount) {
-        this.hitPoints = Math.min(this.hitPoints - amount + this.regen, this.maxHitPoints())
-        this.addExperience(amount)
+        this.hitPoints = Math.min(this.hitPoints - amount + dice(this.regen), this.maxHitPoints())
       },
       isAlive: function() {
         return this.hitPoints > 0
@@ -24,25 +27,50 @@ let result = {
     }
   }
 
-  , create: (input) => {
-    let level = Math.floor(input)
+  , create: function(level) {
+    if (Math.random() < 0.05) {
+      return this.createTree()
+    }
+    return this.createMonster(level)
+  }
+
+  , createTree: function() {
+    return {
+      interact: function(input) {
+        return {newPlayerPosition: input.playerPosition, message: "A tree blocks your path"}
+      },
+      label: () => "T"
+    }
+  }
+
+  , createMonster: (unroundedLevel) => {
+    let level = Math.floor(unroundedLevel)
     return {
       maxHitPoints: level,
       hitPoints: level,
       attack: level,
       regen: 0,
-      interact: function (input) {
-        let player = input.player
-        if (this.hitPoints < 1) {
+      dead: function() {
+        return this.hitPoints < 1
+      },
+      interact: function (playerContext) {
+        let player = playerContext.player
+        if (this.dead()) {
           player.takeDamage(0)
-          return {newPlayerPosition: input.destination}
+          return {newPlayerPosition: playerContext.destination}
         }
-        this.hitPoints -= player.attack
-        player.takeDamage(this.attack)
-        return {newPlayerPosition: input.playerPosition}
+        this.hitPoints -= dice(player.attack)
+        if (this.dead()) {
+          player.addExperience(level ** 2)
+        }
+        player.takeDamage(dice(this.attack))
+        return {
+          newPlayerPosition: playerContext.playerPosition,
+          message: this.dead() ? "You have vanquished a foe!" : "You have wounded a foe..."
+        }
       },
       label: function() {
-        if (this.hitPoints < 1) {
+        if (this.dead()) {
           return ""
         }
         if (this.hitPoints < this.maxHitPoints) {

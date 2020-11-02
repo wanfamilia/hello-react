@@ -33,7 +33,6 @@ class HelloRichardComponent extends Component {
                 <button className="btn btn-success" onClick={this.copyText}>Copy Text</button>
             </div>
             <div className="row jt_counter">
-                <button className="btn btn-success" onClick={this.increment}>Change Counter</button>
             </div>
         </>
         )
