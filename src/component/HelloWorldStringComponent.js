@@ -58,7 +58,7 @@ class HelloWorldStringComponent extends Component {
         <button className="btn btn-success" onClick={this.reset}>Reset</button>
         <p className="jt_message">{this.state.welcomeMessage}</p>
         <PlayerComponent player={this.player}/>
-        <HexGridComponent radius="2" getCentre={this.getCentre}>
+        <HexGridComponent radius="3" getCentre={this.getCentre}>
           {(position) => {
             if (position.matches(this.getCentre())) {
               return <div className="hex-text">{this.player.label()}</div>
